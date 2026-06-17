@@ -6,60 +6,30 @@
   <title>Traveland — Cruceros</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f0f4f8; color: #1a2a3a; min-height: 100vh;
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f4f8; color: #1a2a3a; min-height: 100vh; }
     .banner { width: 100%; max-height: 340px; object-fit: cover; display: block; }
     .container { max-width: 680px; margin: 0 auto; padding: 0 16px 48px; }
-    .card {
-      background: #fff; border-radius: 0 0 16px 16px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.10); padding: 32px 36px 36px;
-    }
-    .card-header {
-      display: flex; align-items: center; gap: 16px;
-      margin-bottom: 8px; padding-bottom: 20px; border-bottom: 2px solid #e8f0fe;
-    }
+    .card { background: #fff; border-radius: 0 0 16px 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.10); padding: 32px 36px 36px; }
+    .card-header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; padding-bottom: 20px; border-bottom: 2px solid #e8f0fe; }
     .logo { height: 52px; width: auto; flex-shrink: 0; }
     .header-text h1 { font-size: 19px; font-weight: 700; color: #1a2a3a; line-height: 1.3; }
     .header-text p { font-size: 13px; color: #64748b; margin-top: 4px; }
     .form-body { margin-top: 22px; }
     .form-group { margin-bottom: 16px; }
-    label {
-      display: block; font-size: 11px; font-weight: 700;
-      color: #475569; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 5px;
-    }
+    label { display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 5px; }
     label .req { color: #e05252; margin-left: 2px; }
-    input[type="text"], input[type="email"], input[type="tel"],
-    input[type="date"], input[type="number"], select {
-      width: 100%; padding: 10px 13px; border: 1.5px solid #d1dce8; border-radius: 8px;
-      font-size: 14px; color: #1a2a3a; background: #fff;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      outline: none; -webkit-appearance: none; appearance: none;
-    }
-    select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
-    }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="number"], select { width: 100%; padding: 10px 13px; border: 1.5px solid #d1dce8; border-radius: 8px; font-size: 14px; color: #1a2a3a; background: #fff; transition: border-color 0.2s, box-shadow 0.2s; outline: none; -webkit-appearance: none; appearance: none; }
+    select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
     input:focus, select:focus { border-color: #2e86de; box-shadow: 0 0 0 3px rgba(46,134,222,0.12); }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .cruise-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
-    .cruise-option {
-      border: 2px solid #d1dce8; border-radius: 10px; padding: 10px 12px;
-      cursor: pointer; transition: all 0.18s; display: flex; align-items: center; gap: 10px; position: relative;
-    }
+    .cruise-option { border: 2px solid #d1dce8; border-radius: 10px; padding: 10px 12px; cursor: pointer; transition: all 0.18s; display: flex; align-items: center; gap: 10px; position: relative; }
     .cruise-option:hover { border-color: #2e86de; background: #f0f7ff; }
     .cruise-option.selected { border-color: #2e86de; background: #ebf4ff; }
     .cruise-option input[type="radio"] { position: absolute; opacity: 0; width: 0; }
     .cruise-name { font-size: 12px; font-weight: 600; color: #1a2a3a; line-height: 1.3; }
     .cruise-line { font-size: 10px; color: #64748b; margin-top: 2px; }
-    .btn-submit {
-      width: 100%; padding: 13px;
-      background: linear-gradient(135deg, #1a73e8, #0d5bbf);
-      color: #fff; border: none; border-radius: 10px;
-      font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 6px;
-      transition: opacity 0.2s, transform 0.1s; letter-spacing: 0.3px;
-    }
+    .btn-submit { width: 100%; padding: 13px; background: linear-gradient(135deg, #1a73e8, #0d5bbf); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 6px; transition: opacity 0.2s, transform 0.1s; letter-spacing: 0.3px; }
     .btn-submit:hover { opacity: 0.92; transform: translateY(-1px); }
     .btn-submit:active { transform: translateY(0); }
     .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
@@ -93,12 +63,10 @@
       <form id="ficha-form" class="form-body" novalidate>
 
         <div class="section-title">Datos de contacto</div>
-
         <div class="form-group">
           <label>Nombre completo <span class="req">*</span></label>
           <input type="text" id="nombre" placeholder="Tu nombre completo" required>
         </div>
-
         <div class="row">
           <div class="form-group">
             <label>WhatsApp <span class="req">*</span></label>
@@ -112,7 +80,6 @@
 
         <hr class="divider">
         <div class="section-title">Crucero deseado <span class="req" style="font-size:13px">*</span></div>
-
         <div class="cruise-options" id="cruise-options">
           <label class="cruise-option" onclick="selectCruise(this,'Norwegian Luna')">
             <input type="radio" name="crucero" value="Norwegian Luna">
@@ -122,9 +89,9 @@
             <input type="radio" name="crucero" value="Disney Adventure">
             <div><div class="cruise-name">Disney Adventure</div><div class="cruise-line">Disney Cruise Line</div></div>
           </label>
-          <label class="cruise-option" onclick="selectCruise(this,'MSC World Asia')">
-            <input type="radio" name="crucero" value="MSC World Asia">
-            <div><div class="cruise-name">MSC World Asia</div><div class="cruise-line">MSC Cruises</div></div>
+          <label class="cruise-option" onclick="selectCruise(this,'MSC World America')">
+            <input type="radio" name="crucero" value="MSC World America">
+            <div><div class="cruise-name">MSC World America</div><div class="cruise-line">MSC Cruises</div></div>
           </label>
           <label class="cruise-option" onclick="selectCruise(this,'Royal Caribbean Legend of the Seas')">
             <input type="radio" name="crucero" value="Royal Caribbean Legend of the Seas">
@@ -134,12 +101,10 @@
 
         <hr class="divider">
         <div class="section-title">Detalles del viaje</div>
-
         <div class="form-group">
           <label>Fecha de viaje deseada <span class="req">*</span></label>
           <input type="date" id="fecha_viaje" required>
         </div>
-
         <div class="row">
           <div class="form-group">
             <label>Pasajeros adultos <span class="req">*</span></label>
@@ -160,41 +125,34 @@
 
   <script>
     document.getElementById('fecha_viaje').min = new Date().toISOString().split('T')[0];
-
     let selectedCruise = '';
     function selectCruise(el, name) {
       document.querySelectorAll('.cruise-option').forEach(o => o.classList.remove('selected'));
       el.classList.add('selected');
       selectedCruise = name;
     }
-
     document.getElementById('ficha-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btn-submit');
       const msg = document.getElementById('status-msg');
-
       const nombre   = document.getElementById('nombre').value.trim();
       const whatsapp = document.getElementById('whatsapp').value.trim();
       const fecha    = document.getElementById('fecha_viaje').value;
       const adultos  = document.getElementById('adultos').value;
-
       msg.className = 'status-msg';
       if (!nombre)         { showMsg('error','El nombre completo es requerido.'); return; }
       if (!whatsapp)       { showMsg('error','El número de WhatsApp es requerido.'); return; }
       if (!selectedCruise) { showMsg('error','Selecciona el crucero de tu interés.'); return; }
       if (!fecha)          { showMsg('error','Selecciona la fecha de viaje.'); return; }
       if (!adultos || parseInt(adultos) < 1) { showMsg('error','Indica la cantidad de pasajeros adultos.'); return; }
-
       btn.disabled = true;
       btn.textContent = 'Enviando...';
-
       try {
         const r = await fetch('/ficha', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
-            nombre,
-            whatsapp,
+            nombre, whatsapp,
             correo:      document.getElementById('correo').value.trim(),
             crucero:     selectedCruise,
             fecha_viaje: fecha,
@@ -208,9 +166,7 @@
           document.getElementById('ficha-form').reset();
           document.querySelectorAll('.cruise-option').forEach(o => o.classList.remove('selected'));
           selectedCruise = '';
-        } else {
-          throw new Error('Error al procesar');
-        }
+        } else { throw new Error(); }
       } catch(err) {
         showMsg('error', 'Ocurrió un error. Por favor intenta de nuevo.');
       } finally {
@@ -218,7 +174,6 @@
         btn.textContent = '🚢 Enviar solicitud';
       }
     });
-
     function showMsg(type, text) {
       const msg = document.getElementById('status-msg');
       msg.className = 'status-msg ' + type;
