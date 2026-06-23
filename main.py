@@ -1,5 +1,5 @@
 import os
-import time
+import re
 import logging
 import httpx
 from fastapi import FastAPI, Request
@@ -22,6 +22,21 @@ COTIZACION_ID         = 88880272   # Etapa destino — cuando el agente guarda l
 # ── Campos de contacto en Kommo ──────────────────────────────────────────────
 PHONE_FIELD_ID = 343300
 EMAIL_FIELD_ID = 343302
+
+WHATSAPP_MSG = (
+    "¡Hola! 🚢 Hemos recibido tu solicitud de crucero. "
+    "Una de nuestras asesoras te estará contactando con la propuesta "
+    "para empezar tu próxima aventura en el mar. ¡Pronto te escribimos!"
+)
+
+def _clean_phone(phone: str) -> str:
+    """Devuelve número limpio con código de país para RD (+1809/829/849)."""
+    digits = re.sub(r"\D", "", phone)
+    # Si tiene 10 dígitos y empieza con 8 → RD (NANP +1)
+    if len(digits) == 10 and digits[0] == "8":
+        digits = "1" + digits
+    # Si ya tiene 11 dígitos con 1 al inicio → ok
+    return "+" + digits
 
 
 app = FastAPI()
@@ -87,11 +102,11 @@ async def crear_lead_crucero(body: FichaCruceroBody):
         except Exception as e:
             logger.error(f"Error creando contacto: {e}")
 
-        # 2. Crear lead en EMBUDO CRUCEROS
+        # 2. Crear lead en EMBUDO CRUCEROS > Cotización directamente
         lead_payload = [{
             "name": f"{body.crucero} — {body.nombre}",
             "pipeline_id": PIPELINE_CRUCEROS_ID,
-            "status_id":   INCOMING_LEADS_ID,
+            "status_id":   COTIZACION_ID,
         }]
         if contact_id:
             lead_payload[0]["_embedded"] = {"contacts": [{"id": contact_id}]}
@@ -120,6 +135,18 @@ async def crear_lead_crucero(body: FichaCruceroBody):
                 )
             except Exception as e:
                 logger.error(f"Error creando nota: {e}")
+
+        # 4. Enviar WhatsApp de confirmación al cliente vía Kommo
+        try:
+            phone = _clean_phone(body.whatsapp)
+            r = await client.post(
+                f"{KOMMO_BASE}/chats/messages/unsolicited",
+                headers=headers,
+                json={"phone": phone, "message": WHATSAPP_MSG}
+            )
+            logger.info(f"WhatsApp enviado a {phone}: {r.status_code} {r.text[:200]}")
+        except Exception as e:
+            logger.error(f"Error enviando WhatsApp: {e}")
 
     return {"success": True, "lead_id": lead_id, "contact_id": contact_id}
 
