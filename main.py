@@ -14,6 +14,11 @@ KOMMO_TOKEN = os.environ.get("KOMMO_TOKEN", "")
 KOMMO_BASE  = "https://travelandrd.kommo.com/api/v4"
 SERVICE_URL = os.environ.get("SERVICE_URL", "https://ficha-cruceros-traveland-production.up.railway.app")
 
+# ── WhatsApp Business API (Meta) ──────────────────────────────────────────────
+WA_TOKEN    = os.environ.get("WA_TOKEN", "")
+WA_PHONE_ID = os.environ.get("WA_PHONE_ID", "110290091857467")
+WA_API_URL  = f"https://graph.facebook.com/v19.0/{WA_PHONE_ID}/messages"
+
 # ── IDs pipeline EMBUDO CRUCEROS ─────────────────────────────────────────────
 PIPELINE_CRUCEROS_ID  = 11573556
 INCOMING_LEADS_ID     = 88880268   # Etapa inicial — donde cae el lead al llenar el form
@@ -22,12 +27,6 @@ COTIZACION_ID         = 88880272   # Etapa destino — cuando el agente guarda l
 # ── Campos de contacto en Kommo ──────────────────────────────────────────────
 PHONE_FIELD_ID = 343300
 EMAIL_FIELD_ID = 343302
-
-WHATSAPP_MSG = (
-    "¡Hola! 🚢 Hemos recibido tu solicitud de crucero. "
-    "Una de nuestras asesoras te estará contactando con la propuesta "
-    "para empezar tu próxima aventura en el mar. ¡Pronto te escribimos!"
-)
 
 def _clean_phone(phone: str) -> str:
     """Devuelve número limpio con código de país para RD (+1809/829/849)."""
@@ -136,17 +135,30 @@ async def crear_lead_crucero(body: FichaCruceroBody):
             except Exception as e:
                 logger.error(f"Error creando nota: {e}")
 
-        # 4. Enviar WhatsApp de confirmación al cliente vía Kommo
-        try:
-            phone = _clean_phone(body.whatsapp)
-            r = await client.post(
-                f"{KOMMO_BASE}/chats/messages/unsolicited",
-                headers=headers,
-                json={"phone": phone, "message": WHATSAPP_MSG}
-            )
-            logger.info(f"WhatsApp enviado a {phone}: {r.status_code} {r.text[:200]}")
-        except Exception as e:
-            logger.error(f"Error enviando WhatsApp: {e}")
+        # 4. Enviar WhatsApp de confirmación al cliente vía Meta Cloud API
+        if WA_TOKEN:
+            try:
+                phone = _clean_phone(body.whatsapp)
+                wa_payload = {
+                    "messaging_product": "whatsapp",
+                    "to": phone.lstrip("+"),
+                    "type": "template",
+                    "template": {
+                        "name": "confirmacion_crucero",
+                        "language": {"code": "es"}
+                    }
+                }
+                r = await client.post(
+                    WA_API_URL,
+                    headers={"Authorization": f"Bearer {WA_TOKEN}",
+                             "Content-Type": "application/json"},
+                    json=wa_payload
+                )
+                logger.info(f"WhatsApp enviado a {phone}: {r.status_code} {r.text[:300]}")
+            except Exception as e:
+                logger.error(f"Error enviando WhatsApp: {e}")
+        else:
+            logger.warning("WA_TOKEN no configurado — WhatsApp no enviado")
 
     return {"success": True, "lead_id": lead_id, "contact_id": contact_id}
 
