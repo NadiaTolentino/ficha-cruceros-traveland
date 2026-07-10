@@ -144,8 +144,12 @@ async def crear_lead_crucero(body: FichaCruceroBody):
                     "to": phone.lstrip("+"),
                     "type": "template",
                     "template": {
-                        "name": "confirmacion_crucero",
-                        "language": {"code": "es"}
+                        "name": "cruceros_1_automatizacion_b1l4ia",
+                        "language": {"code": "es"},
+                        "components": [{
+                            "type": "body",
+                            "parameters": [{"type": "text", "text": body.nombre}]
+                        }]
                     }
                 }
                 r = await client.post(
